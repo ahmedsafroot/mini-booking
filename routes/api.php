@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SearchController;
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum','throttle:api_rate_limit'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 

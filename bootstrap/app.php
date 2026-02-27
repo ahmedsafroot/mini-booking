@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -35,6 +36,20 @@ return Application::configure(basePath: dirname(__DIR__))
                     'x-correlation-id'=>app('cid')
 
                 ], 422);
+            }
+        });
+
+        $exceptions->render(function (ThrottleRequestsException $e, Request $request) {
+            if ($request->is('api/*')) {
+                $cid = app()->has('cid') ? app('cid') : Str::uuid()->toString();
+                app()->instance('cid',$cid);
+                Log::error("x-correlation-id: {$cid}", ['error' => $e->__toString()]);
+                return response()->json([
+                    'status'  => false,
+                    'result'  => null,
+                    'message' =>'Too Many Request Try Later',
+                    'x-correlation-id'=>app('cid')
+                ], 429);
             }
         });
     })->create();
