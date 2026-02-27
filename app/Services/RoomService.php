@@ -3,22 +3,26 @@
 namespace App\Services;
 
 use App\Models\Room;
+use App\Repositories\RoomRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class RoomService
 {
+    public function __construct(protected RoomRepository $roomRepository)
+    {
+    }
     public function list(): LengthAwarePaginator
     {
-        return Room::with('hotel')->paginate(10);
+        return $this->roomRepository->list();
     }
 
     public function create(array $data): Room
     {
-        return Room::create($data);
+        return $this->roomRepository->create($data);
     }
 
     public function delete($id): void
     {
-        Room::findOrFail($id)->delete();
+        $this->roomRepository->delete($id);
     }
 }
