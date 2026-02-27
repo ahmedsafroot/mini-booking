@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Room extends Model
 {
-    protected $fillable=['name','price_per_night','max_occupancy','available_rooms'];
+    protected $fillable=['hotel_id','name','price_per_night','max_occupancy','available_rooms'];
 
     public function hotel(): BelongsTo {
         return $this->belongsTo(Hotel::class);

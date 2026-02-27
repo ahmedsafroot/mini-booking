@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\HotelController;
+use App\Http\Controllers\Web\RoomController;
+use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -17,4 +20,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::resource('hotels', HotelController::class);
+
+    Route::resource('rooms', RoomController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
+
+    Route::get('/search', [SearchController::class, 'index'])
+        ->name('search.index');
+
+    Route::post('/search', [SearchController::class, 'search'])
+        ->name('search.perform');
 });
