@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Web\SearchRequest;
+use App\Http\Requests\SearchRequest;
 use App\Services\SearchService;
 use Illuminate\Contracts\View\View;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Web\StoreRoomRequest;
+use App\Http\Requests\StoreRoomRequest;
 use App\Models\Hotel;
 use App\Services\RoomService;
 use Illuminate\Contracts\View\View;
