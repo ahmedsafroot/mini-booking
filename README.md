@@ -178,3 +178,10 @@ To run tests:
 
 php artisan test
 
+------------------------------------------------------------------------
+
+# Postman Collection
+
+find the postman collection in the project root called `Mini Booking.postman_collection.json`
+
+you can import it and try the apis.
