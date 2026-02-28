@@ -1,59 +1,180 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini Booking
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Overview
 
-## About Laravel
+This project is a mini booking hotels built using
+Laravel 12.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+It includes:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Web authentication using blade files
+-   API authentication using Laravel Sanctum
+-   Clean architecture (use Service and Repository)
+-   Eloquent relationships
+-   Form Request validation
+-   API Resources
+-   Search caching
+-   rate limiting
+-   Search Api Unit test
+-   sample data in database seeder
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The system supports hotel management, room management, and availability
+search.
 
-## Learning Laravel
+------------------------------------------------------------------------
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone repository
 
-## Laravel Sponsors
+git clone https://github.com/ahmedsafroot/mini-booking.git
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+cd mini-booking
 
-### Premium Partners
+### 2. Install dependencies
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+composer install
 
-## Contributing
+### 3. Copy environment file
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+cp .env.example .env
 
-## Code of Conduct
+### 4. Configure environment
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Update the following variables in `.env`:
 
-## Security Vulnerabilities
+DEFAULT_ADMIN_NAME=Admin User\
+DEFAULT_ADMIN_EMAIL=admin@example.com\
+DEFAULT_ADMIN_PASSWORD=12345678
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+API_RATE_LIMIT=100\
+API_RATE_MINUTES=1
 
-## License
+Configure your database connection as needed.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Generate app key
+
+php artisan key:generate
+
+### 6. Run migrations & seed data
+
+php artisan migrate --seed
+
+This will:
+
+-   Create default admin user
+-   Create 10 sample hotels
+-   Create from 1 to 6 rooms for each hotel
+
+### 7. Run the application
+
+php artisan serve
+
+Web URL:
+
+http://127.0.0.1:8000
+
+------------------------------------------------------------------------
+
+## Default Admin Credentials
+
+Email: DEFAULT_ADMIN_EMAIL (from .env)\
+Password: DEFAULT_ADMIN_PASSWORD (from .env)
+
+------------------------------------------------------------------------
+
+# Features
+
+## Web
+
+-   Login / Logout
+-    Dashboard
+-   Hotel Management
+    -   List hotels
+    -   Filter by city
+    -   Pagination
+    -   Add hotel
+-   Room Management
+    -   Add room
+    -   List rooms
+-   Search Page
+    -   Search by city
+    -   Check-in / Check-out
+    -   Guests
+    -   Shows total calculated price
+
+------------------------------------------------------------------------
+
+## API (Sanctum)
+
+All protected routes require:
+
+Authorization: Bearer {token}
+
+### Authentication
+
+POST /api/login\
+POST /api/logout
+
+### Hotels
+
+POST /api/hotels\
+GET /api/hotels?city=&rating=&page=
+
+### Rooms
+
+POST /api/rooms
+
+### Search
+
+GET /api/search?city=&checkin_date=&checkout_date=&guests=
+
+Response includes:
+
+-   Hotel details
+-   Available rooms
+-   Total calculated price
+
+------------------------------------------------------------------------
+
+
+# Rate Limiting
+
+Rate limits are configurable via `.env`:
+
+API_RATE_LIMIT=100\
+API_RATE_MINUTES=1
+
+The limiter is applied using a named throttle:
+
+throttle:api_rate_limit
+
+It limits per authenticated user (or IP if guest).
+
+------------------------------------------------------------------------
+
+# Caching
+
+Search results are cached for 5 minutes.
+
+Cache driver is configurable via:
+
+CACHE_Store=file
+
+can make 5 configured on env file or settings table
+
+------------------------------------------------------------------------
+
+# Testing
+
+Testing uses `.env.testing`.
+
+Database is in-memory SQLite:
+
+DB_CONNECTION=sqlite\
+DB_DATABASE=:memory:
+
+To run tests:
+
+php artisan test
+
