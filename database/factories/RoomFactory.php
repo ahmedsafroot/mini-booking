@@ -19,7 +19,7 @@ class RoomFactory extends Factory
     {
         return [
             'hotel_id'=>Hotel::factory(),
-            'name'=>$this->faker->word,
+            'name'=>$this->faker->randomElement(['Standard Room','Deluxe Room','Suite']),
             'price_per_night'=>$this->faker->numberBetween(10,1000),
             'max_occupancy'=>$this->faker->numberBetween(1,5),
             'available_rooms'=>$this->faker->numberBetween(10,100)
